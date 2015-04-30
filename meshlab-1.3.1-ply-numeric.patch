@@ -1,0 +1,12 @@
+diff -up meshlab-1.3.1/meshlab/src/meshlab/main.cpp.ply-numeric meshlab-1.3.1/meshlab/src/meshlab/main.cpp
+--- meshlab-1.3.1/meshlab/src/meshlab/main.cpp.ply-numeric	2011-09-14 04:42:55.000000000 -0600
++++ meshlab-1.3.1/meshlab/src/meshlab/main.cpp	2011-10-21 14:16:50.910980112 -0600
+@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
+   QLocale::setDefault(QLocale::C);
+   QCoreApplication::setOrganizationName("VCG");
+   QCoreApplication::setApplicationName("MeshLab");
++
++  std::setlocale(LC_NUMERIC, "C");
+ 	
+ 		if(argc>1)	
+ 		{

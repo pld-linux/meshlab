@@ -1,0 +1,413 @@
+diff -up meshlab-1.3.2/meshlab/src/common/common.pro.sharedlib meshlab-1.3.2/meshlab/src/common/common.pro
+--- meshlab-1.3.2/meshlab/src/common/common.pro.sharedlib	2012-07-30 23:42:56.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/common/common.pro	2013-02-26 09:43:25.574027223 -0700
+@@ -1,9 +1,6 @@
+ include (../general.pri)
+ EXIF_DIR = ../external/jhead-2.95
+ 
+-
+-GLEWCODE = $$GLEWDIR/src/glew.c
+-
+ win32-msvc2005:DESTDIR = ../distrib
+ win32-msvc2008:DESTDIR = ../distrib
+ win32-msvc2010:DESTDIR = ../distrib
+@@ -52,8 +49,7 @@ echo "linked shader dir"; \
+ fi;\
+ "
+ INCLUDEPATH *= ../.. \
+-    $$VCGDIR \
+-    $$GLEWDIR/include
++    $$VCGDIR
+ TEMPLATE = lib
+ linux-g++:CONFIG += dll
+ linux-g++:DESTDIR = ../distrib
+@@ -75,7 +71,6 @@ QT += script
+ TARGET = 
+ DEPENDPATH += .
+ INCLUDEPATH += . $$EXIF_DIR
+-DEFINES += GLEW_STATIC
+ win32-msvc2005:DEFINES += _CRT_SECURE_NO_WARNINGS
+ win32-msvc2008:DEFINES += _CRT_SECURE_NO_WARNINGS
+ 
+@@ -106,7 +101,6 @@ SOURCES += filterparameter.cpp \
+ 	mlapplication.cpp \
+ 	scriptsyntax.cpp \
+ 	searcher.cpp \
+-    $$GLEWCODE \
+     meshlabdocumentxml.cpp \
+     meshlabdocumentbundler.cpp
+ 
+diff -up meshlab-1.3.2/meshlab/src/external/external.pro.sharedlib meshlab-1.3.2/meshlab/src/external/external.pro
+--- meshlab-1.3.2/meshlab/src/external/external.pro.sharedlib	2012-05-30 08:24:24.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/external/external.pro	2013-02-26 09:43:25.574027223 -0700
+@@ -2,11 +2,5 @@ config += debug_and_release
+ 
+ TEMPLATE      = subdirs
+ 
+-SUBDIRS       = lib3ds-1.3.0/lib3ds \
+-                bzip2-1.0.5/bzip2-1.0.5.pro \
+-                muparser_v132/src \
+-                levmar-2.3/levmar-2.3.pro \
+-                structuresynth/structuresynth.pro \
+-                                OpenCTM-1.0.3/openctm.pro \
++SUBDIRS       = structuresynth/structuresynth.pro \
+                 jhead-2.95/jhead-2.95.pro
+-#                openkinect/openkinect.pro
+diff -up meshlab-1.3.2/meshlab/src/meshlab/meshlab.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlab/meshlab.pro
+--- meshlab-1.3.2/meshlab/src/meshlab/meshlab.pro.sharedlib	2012-05-30 08:32:44.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlab/meshlab.pro	2013-02-26 09:43:25.575027223 -0700
+@@ -129,7 +129,7 @@ win32-g++:LIBS        	+= -L../external/
+ #	win32-g++:release:LIBS 			+= -L../common/release -lcommon
+ #}
+ 
+-linux-g++:LIBS += -L../external/lib/linux-g++ -ljhead -L../distrib -lcommon -lGLU
++linux-g++:LIBS += -L../external/lib/linux-g++ -ljhead -L../distrib -lcommon -lGLEW -lGLU
+ linux-g++:QMAKE_RPATHDIR += ../distrib
+ linux-g++-32:LIBS += -L../external/lib/linux-g++-32 -L../distrib -lcommon -lGLU
+ linux-g++-32:QMAKE_RPATHDIR += ../distrib
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/edit_arc3D/edit_arc3D.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/edit_arc3D/edit_arc3D.pro
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/edit_arc3D/edit_arc3D.pro.sharedlib	2013-02-26 10:05:31.025983842 -0700
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/edit_arc3D/edit_arc3D.pro	2013-02-26 10:08:53.259977223 -0700
+@@ -32,16 +32,13 @@ RESOURCES     = edit_arc3D.qrc
+ win32-msvc2005:LIBS	   += ../../external/lib/win32-msvc2005/bz2.lib
+ win32-msvc2008:LIBS	   += ../../external/lib/win32-msvc2008/bz2.lib
+ win32-g++:LIBS	+= ../../external/lib/win32-gcc/libbz2.a
+-linux-g++:LIBS	+= ../../external/lib/linux-g++/libbz2.a
+-linux-g++-32:LIBS	+= ../../external/lib/linux-g++-32/libbz2.a
+-linux-g++-64:LIBS	+= ../../external/lib/linux-g++-64/libbz2.a
++linux-g++:LIBS	+= -lbz2
++linux-g++-32:LIBS	+= -lbz2
++linux-g++-64:LIBS	+= -lbz2
+ 
+ win32-msvc2005:INCLUDEPATH += ../../external/bzip2-1.0.5
+ win32-msvc2008:INCLUDEPATH += ../../external/bzip2-1.0.5
+ win32-g++:INCLUDEPATH  += ../../external/bzip2-1.0.5
+-linux-g++:INCLUDEPATH	+= ../../external/bzip2-1.0.5
+-linux-g++-32:INCLUDEPATH	+= ../../external/bzip2-1.0.5
+-linux-g++-64:INCLUDEPATH	+= ../../external/bzip2-1.0.5
+ 
+ mac:LIBS   += -lbz2
+ 
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_func/filter_func.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_func/filter_func.pro
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_func/filter_func.pro.sharedlib	2011-10-14 10:38:01.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_func/filter_func.pro	2013-02-26 09:43:25.575027223 -0700
+@@ -6,15 +6,13 @@ SOURCES       += filter_func.cpp
+ 
+ TARGET        = filter_func
+ 
+-INCLUDEPATH += ../../external/muparser_v132/include
+-
+ # Note: we need static libs so when building muparser lib use 
+ # ./configure --enable-shared=no
+ 
+ win32-msvc2005:LIBS += ../../external/lib/win32-msvc2005/muparser.lib
+ win32-msvc2008:LIBS += ../../external/lib/win32-msvc2008/muparser.lib
+ macx:LIBS            += $$MACLIBDIR/libmuparser.a
+-linux-g++:LIBS       += ../../external/lib/linux-g++/libmuparser.a
++linux-g++:LIBS       += -lmuparser
+ linux-g++-32:LIBS       += ../../external/lib/linux-g++-32/libmuparser.a
+ linux-g++-64:LIBS       += ../../external/lib/linux-g++-64/libmuparser.a
+ win32-g++:LIBS		 += ../../external/lib/win32-gcc/libmuparser.a
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/filter_isoparametrization.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/filter_isoparametrization.pro
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/filter_isoparametrization.pro.sharedlib	2011-10-14 10:37:59.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/filter_isoparametrization.pro	2013-02-26 09:43:25.576027223 -0700
+@@ -23,8 +23,7 @@ HEADERS       += ./diamond_sampler.h \
+ SOURCES       += ./filter_isoparametrization.cpp 
+ 				
+ TARGET        = filter_isoparametrization
+-INCLUDEPATH  += ./  \
+-                ../../external/levmar-2.3/
++INCLUDEPATH  += ./
+ 
+ win32-msvc2005:QMAKE_CXXFLAGS   +=  /openmp -D_USE_OMP
+ win32-msvc2008:QMAKE_CXXFLAGS   +=  /openmp -D_USE_OMP
+@@ -47,7 +46,7 @@ win32-msvc.net:LIBS	+= ../../external/li
+ win32-msvc2005:LIBS	+= ../../external/lib/win32-msvc2005/levmar.lib
+ win32-msvc2008:LIBS	+= ../../external/lib/win32-msvc2008/levmar.lib
+ win32-g++:LIBS		+= -L../../external/lib/win32-gcc -llevmar
+-linux-g++:LIBS		+= -L../../external/lib/linux-g++ -llevmar
++linux-g++:LIBS		+= -llevmar
+ linux-g++-32:LIBS		+= -L../../external/lib/linux-g++-32 -llevmar
+ linux-g++-64:LIBS		+= -L../../external/lib/linux-g++-64 -llevmar
+ macx:LIBS += $$MACLIBDIR/liblevmar.a
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h.sharedlib	2011-10-14 10:37:59.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/param_collapse.h	2013-02-26 09:43:25.576027223 -0700
+@@ -14,7 +14,7 @@
+ 
+ #include <local_parametrization.h>
+ #include <mesh_operators.h>
+-#include <lm.h>
++#include <levmar.h>
+ #include <uv_grid.h>
+ 
+ #include "opt_patch.h"
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/parametrizator.h.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/parametrizator.h
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/parametrizator.h.sharedlib	2011-10-14 10:37:59.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_isoparametrization/parametrizator.h	2013-02-26 09:43:25.577027223 -0700
+@@ -34,7 +34,7 @@
+ #include <vcg/space/color4.h>
+ #include <dual_coord_optimization.h>
+ #include <float.h>
+-#include <lm.h>
++#include <levmar.h>
+ #ifndef _MESHLAB
+ #include <wrap/io_trimesh/export_ply.h>
+ #endif
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/levmarmethods.h.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/levmarmethods.h
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/levmarmethods.h.sharedlib	2012-05-30 07:57:47.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/levmarmethods.h	2013-02-26 09:43:25.577027223 -0700
+@@ -12,7 +12,7 @@ sufficient to get a calibrated shot.<br>
+ 
+ #include <list>
+ 
+-#include "../../external/levmar-2.3/lm.h"
++#include <levmar.h>
+ 
+ 
+ struct LevmarCorrelation {
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/solver.h.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/solver.h
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/solver.h.sharedlib	2012-05-30 07:57:47.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_mutualinfoxml/solver.h	2013-02-26 09:43:25.578027223 -0700
+@@ -5,7 +5,7 @@
+ #include "alignset.h"
+ 
+ #include "parameters.h"
+-#include "../../external/levmar-2.3/lm.h"
++#include <levmar.h>
+ 
+ #include <iostream>
+ #include <fstream>
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_photosynth/filter_photosynth.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_photosynth/filter_photosynth.pro
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_photosynth/filter_photosynth.pro.sharedlib	2011-10-14 10:35:23.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_photosynth/filter_photosynth.pro	2013-02-26 09:43:25.579027223 -0700
+@@ -1,17 +1,15 @@
+ include (../../shared.pri)
+ 
+-QTSOAPDIR = ../../external/qtsoap-2.7_1/src
+-
+-INCLUDEPATH += $$QTSOAPDIR
++INCLUDEPATH += /usr/include/QtSoap
+ 
+ HEADERS       += filter_photosynth.h \
+-                 synthData.h \
+-                 $$QTSOAPDIR/qtsoap.h
++                 synthData.h
+ 
+ SOURCES       += filter_photosynth.cpp \
+-                 downloader.cpp \
+-                 $$QTSOAPDIR/qtsoap.cpp
++                 downloader.cpp
+ 
+ TARGET         = filter_photosynth
+ 
++linux-g++:LIBS += -lqtsoap
++
+ QT += network
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/filter_qhull.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/filter_qhull.pro
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/filter_qhull.pro.sharedlib	2011-10-14 10:35:34.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/filter_qhull.pro	2013-02-26 09:43:25.580027223 -0700
+@@ -8,28 +8,8 @@ HEADERS       += filter_qhull.h \
+ SOURCES       += filter_qhull.cpp \ 
+ 		qhull_tools.cpp 
+ 
+-HEADERS += 	../../external/qhull-2003.1/src/geom.h \
+-		../../external/qhull-2003.1/src/io.h \
+-		../../external/qhull-2003.1/src/mem.h \
+-		../../external/qhull-2003.1/src/merge.h \
+-		../../external/qhull-2003.1/src/poly.h \
+-		../../external/qhull-2003.1/src/qhull.h \
+-		../../external/qhull-2003.1/src/qset.h \
+-		../../external/qhull-2003.1/src/stat.h \
+-		../../external/qhull-2003.1/src/user.h 
++INCLUDEPATH += /usr/include/qhull
+ 
+-SOURCES +=	../../external/qhull-2003.1/src/geom.c \
+-		../../external/qhull-2003.1/src/geom2.c \
+-		../../external/qhull-2003.1/src/global.c \
+-		../../external/qhull-2003.1/src/io.c \
+-		../../external/qhull-2003.1/src/mem.c \
+-		../../external/qhull-2003.1/src/merge.c \
+-		../../external/qhull-2003.1/src/poly.c \
+-		../../external/qhull-2003.1/src/poly2.c \
+-		../../external/qhull-2003.1/src/qconvex.c \
+-		../../external/qhull-2003.1/src/qhull.c \
+-		../../external/qhull-2003.1/src/qset.c \
+-		../../external/qhull-2003.1/src/stat.c \
+-		../../external/qhull-2003.1/src/user.c 
++LIBS += -lqhull
+ 
+-TARGET        = filter_qhull
+\ No newline at end of file
++TARGET        = filter_qhull
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h.sharedlib	2011-10-14 10:35:34.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/filter_qhull/qhull_tools.h	2013-02-26 09:43:25.581027223 -0700
+@@ -55,14 +55,14 @@ extern "C"
+ #endif
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include "../../external/qhull-2003.1/src/qhull.h"
+-#include "../../external/qhull-2003.1/src/mem.h"
+-#include "../../external/qhull-2003.1/src/qset.h"
+-#include "../../external/qhull-2003.1/src/geom.h"
+-#include "../../external/qhull-2003.1/src/merge.h"
+-#include "../../external/qhull-2003.1/src/poly.h"
+-#include "../../external/qhull-2003.1/src/io.h"
+-#include "../../external/qhull-2003.1/src/stat.h"
++#include <qhull/qhull.h>
++#include <qhull/mem.h>
++#include <qhull/qset.h>
++#include <qhull/geom.h>
++#include <qhull/merge.h>
++#include <qhull/poly.h>
++#include <qhull/io.h>
++#include <qhull/stat.h>
+ #if defined(__cplusplus)
+ }
+ #endif
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/io_3ds/io_3ds.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabplugins/io_3ds/io_3ds.pro
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/io_3ds/io_3ds.pro.sharedlib	2011-10-14 10:36:53.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/io_3ds/io_3ds.pro	2013-02-26 09:43:25.582027223 -0700
+@@ -14,7 +14,7 @@ SOURCES       += 	meshio.cpp \
+ 
+ TARGET        = io_3ds
+ 
+-INCLUDEPATH += ../../external/lib3ds-1.3.0/
++INCLUDEPATH += /usr/include/lib3ds/
+ 
+ # Notes on the paths of lib3ds files.
+ # Once you have compiled the library put the lib files in a dir named lib/XXX/ 
+@@ -25,9 +25,7 @@ win32-msvc.net:LIBS	+= ../../external/li
+ win32-msvc2005:LIBS	+= ../../external/lib/win32-msvc2005/3ds.lib
+ win32-msvc2008:LIBS	+= ../../external/lib/win32-msvc2008/3ds.lib
+ win32-g++:LIBS		+= ../../external/lib/win32-gcc/lib3ds.a
+-linux-g++:LIBS += ../../external/lib/linux-g++/lib3ds.a
+-linux-g++-32:LIBS += ../../external/lib/linux-g++-32/lib3ds.a
+-linux-g++-64:LIBS += ../../external/lib/linux-g++-64/lib3ds.a
++linux-g++:LIBS += -l3ds
+ 
+ # unix:LIBS		+= -L../../../../code/lib/lib3ds-1.3.0/lib3ds/lib/unix -l3ds
+ 
+diff -up meshlab-1.3.2/meshlab/src/meshlabserver/meshlabserver.pro.sharedlib meshlab-1.3.2/meshlab/src/meshlabserver/meshlabserver.pro
+--- meshlab-1.3.2/meshlab/src/meshlabserver/meshlabserver.pro.sharedlib	2011-10-14 10:34:48.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabserver/meshlabserver.pro	2013-02-26 09:43:25.583027223 -0700
+@@ -1,5 +1,3 @@
+-GLEWDIR = ../external/glew-1.5.1
+-
+ HEADERS        = 
+ 
+ SOURCES        = mainserver.cpp
+@@ -25,12 +23,8 @@ win32-msvc2005:  LIBS += -L../distrib -l
+ win32-msvc2008:  LIBS += -L../distrib -lcommon
+ win32-msvc2010:  LIBS += -L../distrib -lcommon
+ win32-g++:  LIBS += -L../distrib -lcommon
+-linux-g++:  LIBS += -L../distrib -lcommon
++linux-g++:  LIBS += -L../distrib -lcommon -lGLEW
+ linux-g++:QMAKE_RPATHDIR += ../distrib
+-linux-g++-32:  LIBS += -L../distrib -lcommon
+-linux-g++-32:QMAKE_RPATHDIR += ../distrib
+-linux-g++-64:  LIBS += -L../distrib -lcommon
+-linux-g++-64:QMAKE_RPATHDIR += ../distrib
+ #CONFIG (release,debug | release) {
+ #	win32-msvc2005:release:  LIBS += -L../common/release -lcommon
+ #	win32-msvc2008:release:  LIBS += -L../common/release -lcommon
+@@ -43,7 +37,7 @@ win32-msvc2010:DEFINES += GLEW_STATIC
+ 
+ #DEFINES += GLEW_STATIC
+ 
+-INCLUDEPATH += . .. ../../../vcglib $$GLEWDIR/include
++INCLUDEPATH += . .. ../../../vcglib
+ CONFIG += stl 
+ CONFIG += console
+ 
+diff -up meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/levmarmethods.h.sharedlib meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/levmarmethods.h
+--- meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/levmarmethods.h.sharedlib	2012-04-05 03:05:12.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/levmarmethods.h	2013-02-26 09:43:25.583027223 -0700
+@@ -12,7 +12,7 @@ sufficient to get a calibrated shot.<br>
+ 
+ #include <list>
+ 
+-#include "../../external/levmar-2.3/lm.h"
++#include <levmar.h>
+ 
+ 
+ struct LevmarCorrelation {
+diff -up meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/solver.h.sharedlib meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/solver.h
+--- meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/solver.h.sharedlib	2012-04-05 03:05:12.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/plugins_experimental/filter_mutualglobal/solver.h	2013-02-26 09:43:25.584027223 -0700
+@@ -5,7 +5,7 @@
+ #include "alignset.h"
+ 
+ #include "parameters.h"
+-#include "../../external/levmar-2.3/lm.h"
++#include <levmar.h>
+ 
+ #include <iostream>
+ #include <fstream>
+diff -up meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_curvature_from_sliding/curvature_from_sliding.h.sharedlib meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_curvature_from_sliding/curvature_from_sliding.h
+--- meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_curvature_from_sliding/curvature_from_sliding.h.sharedlib	2011-10-14 10:30:46.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_curvature_from_sliding/curvature_from_sliding.h	2013-02-26 09:43:25.585027223 -0700
+@@ -30,7 +30,7 @@
+ #include <vcg/complex/allocate.h>
+ #include <vcg/complex/algorithms/subset.h>
+ #include <vcg/space/index/grid_static_ptr.h>
+-#include <lib/levmar/lm.h>
++#include <levmar.h>
+ 
+ #include "frame.h"
+ 
+@@ -313,4 +313,4 @@ static void eval_only_k( double *x,doubl
+ 
+ };// end of class
+ 
+-}// end of subspace
+\ No newline at end of file
++}// end of subspace
+diff -up meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/levmarmethods.h.sharedlib meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/levmarmethods.h
+--- meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/levmarmethods.h.sharedlib	2012-06-27 03:34:59.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/levmarmethods.h	2013-02-26 09:43:25.620027222 -0700
+@@ -12,7 +12,7 @@ sufficient to get a calibrated shot.<br>
+ 
+ #include <list>
+ 
+-#include "../../external/levmar-2.3/lm.h"
++#include <levmar.h>
+ 
+ 
+ struct LevmarCorrelation {
+diff -up meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/solver.h.sharedlib meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/solver.h
+--- meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/solver.h.sharedlib	2012-06-27 03:34:59.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/plugins_unsupported/filter_mutualinfo/solver.h	2013-02-26 09:43:25.621027222 -0700
+@@ -5,7 +5,7 @@
+ #include "alignset.h"
+ 
+ #include "parameters.h"
+-#include "../../external/levmar-2.3/lm.h"
++#include <levmar.h>
+ 
+ #include <iostream>
+ #include <fstream>
+diff -up meshlab-1.3.2/meshlab/src/plugins_unsupported/io_epoch/io_epoch.pro.sharedlib meshlab-1.3.2/meshlab/src/plugins_unsupported/io_epoch/io_epoch.pro
+--- meshlab-1.3.2/meshlab/src/plugins_unsupported/io_epoch/io_epoch.pro.sharedlib	2013-02-26 10:07:51.957979230 -0700
++++ meshlab-1.3.2/meshlab/src/plugins_unsupported/io_epoch/io_epoch.pro	2013-02-26 10:08:26.850978087 -0700
+@@ -30,16 +30,13 @@ QT           += xml
+ win32-msvc2005:LIBS	   += ../../external/lib/win32-msvc2005/bz2.lib
+ win32-msvc2008:LIBS	   += ../../external/lib/win32-msvc2008/bz2.lib
+ win32-g++:LIBS	+= ../../external/lib/win32-gcc/libbz2.a
+-linux-g++:LIBS	+= ../../external/lib/linux-g++/libbz2.a
+-linux-g++-32:LIBS	+= ../../external/lib/linux-g++-32/libbz2.a
+-linux-g++-64:LIBS	+= ../../external/lib/linux-g++-64/libbz2.a
++linux-g++:LIBS	+= -lbz2
++linux-g++-32:LIBS	+= -lbz2
++linux-g++-64:LIBS	+= -lbz2
+ 
+ win32-msvc2005:INCLUDEPATH += ../../external/bzip2-1.0.5
+ win32-msvc2008:INCLUDEPATH += ../../external/bzip2-1.0.5
+ win32-g++:INCLUDEPATH  += ../../external/bzip2-1.0.5
+-linux-g++:INCLUDEPATH	+= ../../external/bzip2-1.0.5
+-linux-g++-32:INCLUDEPATH	+= ../../external/bzip2-1.0.5
+-linux-g++-64:INCLUDEPATH	+= ../../external/bzip2-1.0.5
+ 
+ mac:LIBS   += -lbz2
+ 

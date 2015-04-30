@@ -1,0 +1,12 @@
+diff -up meshlab-1.3.2/meshlab/src/common/pluginmanager.cpp.plugin-path meshlab-1.3.2/meshlab/src/common/pluginmanager.cpp
+--- meshlab-1.3.2/meshlab/src/common/pluginmanager.cpp.plugin-path	2012-07-30 23:42:56.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/common/pluginmanager.cpp	2012-09-30 01:02:35.418783945 -0600
+@@ -230,7 +230,7 @@ QString PluginManager::getBaseDirPath()
+ 
+ QString PluginManager::getPluginDirPath()
+ {
+-  QDir pluginsDir(getBaseDirPath());
++  QDir pluginsDir(QString(PLUGIN_DIR));
+   if(!pluginsDir.exists("plugins"))
+     //QMessageBox::warning(0,"Meshlab Initialization","Serious error. Unable to find the plugins directory.");
+     qDebug("Meshlab Initialization: Serious error. Unable to find the plugins directory.");

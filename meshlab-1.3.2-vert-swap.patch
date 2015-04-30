@@ -1,0 +1,12 @@
+diff -up meshlab-1.3.2/vcglib/wrap/gl/trimesh.h.vert-swap meshlab-1.3.2/vcglib/wrap/gl/trimesh.h
+--- meshlab-1.3.2/vcglib/wrap/gl/trimesh.h.vert-swap	2012-09-30 01:23:32.071884081 -0600
++++ meshlab-1.3.2/vcglib/wrap/gl/trimesh.h	2012-09-30 01:27:38.281903698 -0600
+@@ -1003,7 +1003,7 @@ void Crease(MESH_TYPE &m, typename MESH_
+ 			}
+ 		}
+ 
+-	m.vert.math::Swap(newvert);
++	m.vert.swap(newvert);  // see Debian bug 667276
+ 	m.vn=m.vert.size();
+ }
+ 

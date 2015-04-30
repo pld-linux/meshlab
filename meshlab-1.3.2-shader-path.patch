@@ -1,0 +1,48 @@
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/meshrender.cpp.shader-path meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/meshrender.cpp
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/meshrender.cpp.shader-path	2012-03-21 12:05:01.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/meshrender.cpp	2012-09-30 01:05:20.110797069 -0600
+@@ -39,7 +39,7 @@ void MeshShaderRenderPlugin::initActionL
+ 	qaNone->setCheckable(false);
+ 	actionList << qaNone;*/
+ 
+-	QDir shadersDir = QDir(qApp->applicationDirPath());
++	QDir shadersDir = QDir("/usr/share/meshlab");
+ #if defined(Q_OS_WIN)
+ 	if (shadersDir.dirName() == "debug" || shadersDir.dirName() == "release" || shadersDir.dirName() == "plugins"  )
+ 		shadersDir.cdUp();
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/shaderDialog.cpp.shader-path meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/shaderDialog.cpp
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/shaderDialog.cpp.shader-path	2011-10-14 10:36:13.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/render_gdp/shaderDialog.cpp	2012-09-30 01:03:57.643790497 -0600
+@@ -323,7 +323,7 @@ void ShaderDialog::changeTexturePath(int
+ void ShaderDialog::browseTexturePath(int i) {
+ 	QFileDialog fd(0,"Choose new texture");
+ 
+-	QDir shadersDir = QDir(qApp->applicationDirPath());
++	QDir shadersDir = QDir("/usr/share/meshlab");
+ #if defined(Q_OS_WIN)
+ 	if (shadersDir.dirName() == "debug" || shadersDir.dirName() == "release")
+ 		shadersDir.cdUp();
+diff -up meshlab-1.3.2/meshlab/src/meshlabplugins/render_rfx/render_rfx.cpp.shader-path meshlab-1.3.2/meshlab/src/meshlabplugins/render_rfx/render_rfx.cpp
+--- meshlab-1.3.2/meshlab/src/meshlabplugins/render_rfx/render_rfx.cpp.shader-path	2012-03-21 12:05:02.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/meshlabplugins/render_rfx/render_rfx.cpp	2012-09-30 01:03:57.641790497 -0600
+@@ -55,7 +55,7 @@ QList<QAction*> RenderRFX::actions()
+ 
+ void RenderRFX::initActionList()
+ {
+-	QDir shadersDir = PluginManager::getBaseDirPath();
++  QDir shadersDir = QDir("/usr/share/meshlab");
+ 
+ #if defined(Q_OS_WIN)
+ 	if (shadersDir.dirName() == "debug"   ||
+diff -up meshlab-1.3.2/meshlab/src/plugins_experimental/render_splatpyramid/dialog.cpp.shader-path meshlab-1.3.2/meshlab/src/plugins_experimental/render_splatpyramid/dialog.cpp
+--- meshlab-1.3.2/meshlab/src/plugins_experimental/render_splatpyramid/dialog.cpp.shader-path	2011-10-14 10:31:04.000000000 -0600
++++ meshlab-1.3.2/meshlab/src/plugins_experimental/render_splatpyramid/dialog.cpp	2012-09-30 01:03:57.644790497 -0600
+@@ -123,7 +123,7 @@ void Dialog::changeTexturePath(int i) {
+ void Dialog::browseTexturePath(int i) {
+   QFileDialog fd(0,"Choose new texture");
+ 
+-  QDir shadersDir = QDir(qApp->applicationDirPath());
++  QDir shadersDir = QDir("/usr/share/meshlab");
+ #if defined(Q_OS_WIN)
+   if (shadersDir.dirName() == "debug" || shadersDir.dirName() == "release")
+ 	shadersDir.cdUp();
