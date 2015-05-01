@@ -1,3 +1,6 @@
+# Patch to fix FTBFS due to missing include of <cstddef>
+# from Teemu Ikonen <tpikonen@gmail.com>
+# Also added a missing include of <unistd.h>
 diff -up meshlab-1.3.2/vcglib/wrap/io_tetramesh/import_ply.h.cstddef meshlab-1.3.2/vcglib/wrap/io_tetramesh/import_ply.h
 --- meshlab-1.3.2/vcglib/wrap/io_tetramesh/import_ply.h.cstddef	2011-01-25 00:53:39.000000000 -0700
 +++ meshlab-1.3.2/vcglib/wrap/io_tetramesh/import_ply.h	2012-09-30 02:40:19.697251228 -0600

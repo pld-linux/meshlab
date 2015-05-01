@@ -1,3 +1,5 @@
+# Patch to fix reading of .ply files in comma separator locales
+# from Teemu Ikonen <tpikonen@gmail.com>
 diff -up meshlab-1.3.1/meshlab/src/meshlab/main.cpp.ply-numeric meshlab-1.3.1/meshlab/src/meshlab/main.cpp
 --- meshlab-1.3.1/meshlab/src/meshlab/main.cpp.ply-numeric	2011-09-14 04:42:55.000000000 -0600
 +++ meshlab-1.3.1/meshlab/src/meshlab/main.cpp	2011-10-21 14:16:50.910980112 -0600

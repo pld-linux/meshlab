@@ -1,3 +1,4 @@
+# Disable io_ctm until openctm is packaged
 diff -up meshlab-1.3.2/meshlab/src/meshlab_full.pro.noctm meshlab-1.3.2/meshlab/src/meshlab_full.pro
 --- meshlab-1.3.2/meshlab/src/meshlab_full.pro.noctm	2012-08-02 06:15:32.000000000 -0600
 +++ meshlab-1.3.2/meshlab/src/meshlab_full.pro	2012-09-30 01:06:53.282804493 -0600
