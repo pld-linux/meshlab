@@ -52,16 +52,16 @@ these kinds of meshes.
 mv meshlab-snapshot-svn3524/meshlab/docs meshlab/docs
 rm -rf meshlab-snapshot-svn3524
 
-%patch0 -P 0 -p1
-%patch0 -P 1 -p1
-%patch0 -P 2 -p1
-%patch0 -P 3 -p1
-%patch0 -P 4 -p1
-%patch0 -P 5 -p1
-%patch0 -P 6 -p1
-%patch0 -P 9 -p1
-%patch0 -P 10 -p1
-%patch0 -P 11 -p1
+%patch -P0 -P 0 -p1
+%patch -P0 -P 1 -p1
+%patch -P0 -P 2 -p1
+%patch -P0 -P 3 -p1
+%patch -P0 -P 4 -p1
+%patch -P0 -P 5 -p1
+%patch -P0 -P 6 -p1
+%patch -P0 -P 9 -p1
+%patch -P0 -P 10 -p1
+%patch -P0 -P 11 -p1
 
 # Turn of execute permissions on source files to avoid rpmlint
 # errors and warnings for the debuginfo package
